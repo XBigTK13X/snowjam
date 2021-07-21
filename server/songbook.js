@@ -5,7 +5,12 @@ var crypto = require("crypto");
 class Song {
   constructor(file_path) {
     let parts = file_path.split("/");
-    this.title = parts[parts.length - 1];
+    this.name = parts[parts.length - 1];
+    if (this.name.indexOf(".") !== -1) {
+      this.name = this.name.split(".").slice(0, -1).join(".");
+    }
+    this.title = this.name.split(" - ")[1];
+    this.artist = this.name.split(" - ")[0];
     this.collection = parts[parts.length - 2];
     this.file_path = file_path;
     this.id = crypto.createHash("md5").update(file_path).digest("hex");
