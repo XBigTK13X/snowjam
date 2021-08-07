@@ -24,6 +24,17 @@
     font-family: monospace, monospace;
 }
 
+.chord-diagram {
+    display: inline-block;
+    width: 4vw;
+    height: 6vw;
+}
+
+.chord-diagram > img {
+    width: 100%;
+    height: 100%;
+}
+
 .chord-data-comment {
     color: #878787;
 }

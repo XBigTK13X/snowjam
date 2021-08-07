@@ -113,15 +113,22 @@ window.loadSongs = () => {
 window.loadSong = (song_id) => {
     client.getSong(song_id).then((response) => {
         let song = response.song
-        console.log({ song })
         let song_markup = song.content.html
-        if (song.content.chord_data_v1) {
-            song_markup = song.content.chord_data_v1
+        let chord_info = ''
+        if (song.chord_data) {
+            song_markup = song.chord_data.html
+            chord_info = `
+            <pre class="song-content">
+                ${song.chord_data.sorted_chords}
+            </pre>
+            `
         }
         let markup = `
     <h2>
         ${song.info.title}
     </h2>
+    <h3>Chords</h3>
+    ${chord_info}
     <pre class="song-content">
         ${song_markup}
     </pre>`
