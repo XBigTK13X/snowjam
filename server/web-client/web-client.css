@@ -1,35 +1,56 @@
 .navbar {
-  background-color: #c0c0c0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 100;
-  height: 7vh;
+    background-color: #c0c0c0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    height: 7vh;
 }
 .nav-button {
-  width: 18vw;
-  height: 5vh;
-  margin-left: 1vw;
-  margin-top: 1vh;
-  font-size: 3vw;
-  cursor: pointer;
+    width: 18vw;
+    height: 5vh;
+    margin-left: 1vw;
+    margin-top: 1vh;
+    font-size: 3vw;
+    cursor: pointer;
 }
 
 .page-content {
-  padding-top: 7vh;
-}
-
-.song-button {
-  width: 80vw;
-  height: 20vh;
-  margin-left: 10vw;
-  margin-top: 1vh;
-  border: 2px solid black;
-  font-size: 3vh;
-  cursor: pointer;
+    padding-top: 7vh;
 }
 
 .song-content {
-  font-family: monospace, monospace;
+    font-family: monospace, monospace;
+}
+
+.song-button {
+    width: 15vw;
+    height: 20vh;
+    margin-left: 2vw;
+    margin-top: 1vh;
+    border: 2px solid black;
+    font-size: 2vh;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    overflow-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 1440px) {
+    .song-button {
+        width: 80vw;
+        height: 20vh;
+        margin-left: 10vw;
+        margin-top: 1vh;
+        border: 2px solid black;
+        font-size: 3vh;
+        cursor: pointer;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        overflow-wrap: break-word;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 }
