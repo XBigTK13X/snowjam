@@ -24,6 +24,22 @@
     font-family: monospace, monospace;
 }
 
+.chord-data-comment {
+    color: #878787;
+}
+
+.chord-data-section {
+    font-style: italic;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.chord-data-chords {
+}
+
+.chord-data-lyrics {
+}
+
 .song-button {
     width: 15vw;
     height: 20vh;
