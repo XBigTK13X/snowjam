@@ -29,13 +29,12 @@ class ApiClient {
 }
 
 let client = new ApiClient()
-
 let navbar = `<div class="navbar">
-      <button class="nav-button" onclick="window.loadSongs()">Songs</button>
-      <button class="nav-button" onclick="window.jumpToTop()">Top</button>
-      <button class="nav-button" onclick="window.changeScrollSpeed(-1)">Slower</button>
-      <button class="nav-button" onclick="window.toggleScroll()">Autoscroll</button>
-      <button class="nav-button" onclick="window.changeScrollSpeed(1)">Faster</button>
+      <a href="/" class="nav-button">Songs</a>
+      <a class="nav-button" onclick="window.jumpToTop()">Top</a>
+      <a class="nav-button" onclick="window.changeScrollSpeed(-1)">Slower</a>
+      <a class="nav-button" onclick="window.toggleScroll()">Autoscroll</a>
+      <a class="nav-button" onclick="window.changeScrollSpeed(1)">Faster</a>
     </div>`
 
 let loadPage = (content) => {
@@ -100,7 +99,9 @@ window.loadSongs = () => {
               ${response.songs.list
                   .map((song_id) => {
                       let song = response.songs.lookup[song_id]
-                      return `<button class="song-button" onclick="window.loadSong('${song.id}')">${song.artist}<br/><b>${song.title}</b></button>`
+                      return `<a class="song-button${song.is_chord_v1 ? ' chord-v1' : ''}" href="#song?song_id=${song.id}">${song.artist}<br/><b>${
+                          song.title
+                      }</b></a>`
                   })
                   .join('')}
               </div>
@@ -136,6 +137,19 @@ window.loadSong = (song_id) => {
     })
 }
 
+const changePage = () => {
+    if (window.location.hash && window.location.hash.indexOf('#song?') !== -1) {
+        let song_id = window.location.hash.split('song_id=')[1]
+        window.loadSong(song_id)
+    } else {
+        window.loadSongs()
+    }
+}
+
+window.onpopstate = (e) => {
+    changePage()
+}
+
 $(() => {
-    window.loadSongs()
+    changePage()
 })

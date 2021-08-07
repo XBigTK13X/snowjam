@@ -54,7 +54,7 @@ class ChordDataV1 {
         this.sorted_chords = _.uniq(this.sorted_chords).sort()
         this.sorted_chords_html = this.sorted_chords
             .map((x) => {
-                return `<div class="chord-diagram"><image src="/server/web-client/img/chord/${x}.png"/></div>`
+                return `<div class="chord-diagram"><image src="/server/web-client/img/chord/${x}.png" alt="${x}"/></div>`
             })
             .join('')
     }
@@ -78,6 +78,7 @@ class Song {
         }
 
         this.file_path = file_path
+        this.is_chord_v1 = this.file_path.indexOf('.v1chord') !== -1
         this.id = crypto.createHash('md5').update(file_path).digest('hex')
     }
 }
@@ -109,10 +110,11 @@ class Songbook {
         this.getSong = async (song_id) => {
             return new Promise((resolve, reject) => {
                 try {
+                    let song = this.songs.lookup[song_id]
                     const file_path = this.songs.lookup[song_id].file_path
                     const raw_text = fs.readFileSync(file_path, 'utf8')
                     let chord_data = null
-                    if (file_path.indexOf('.v1chord') !== -1) {
+                    if (song.is_chord_v1) {
                         let chord_data_v1 = new ChordDataV1(raw_text)
                         chord_data = {
                             html: chord_data_v1.html,

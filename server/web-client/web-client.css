@@ -8,12 +8,32 @@
     height: 7vh;
 }
 .nav-button {
-    width: 18vw;
-    height: 5vh;
-    margin-left: 1vw;
+    width: 10vw;
+    height: 3vh;
+    margin-left: 2vw;
     margin-top: 1vh;
-    font-size: 3vw;
+    border: 2px solid black;
+    font-size: 2vh;
+    text-overflow: ellipsis;
     cursor: pointer;
+    overflow-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    color: #272727;
+    background-color: d7d7d7;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.nav-button:hover {
+    background-color: #c7c7c7;
 }
 
 .page-content {
@@ -26,8 +46,8 @@
 
 .chord-diagram {
     display: inline-block;
-    width: 4vw;
-    height: 6vw;
+    width: 6vw;
+    height: 10vw;
 }
 
 .chord-diagram > img {
@@ -53,7 +73,7 @@
 
 .song-button {
     width: 15vw;
-    height: 20vh;
+    height: 6vh;
     margin-left: 2vw;
     margin-top: 1vh;
     border: 2px solid black;
@@ -63,12 +83,26 @@
     overflow-wrap: break-word;
     white-space: nowrap;
     overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    color: #272727;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.song-button:hover {
+    background-color: #c7c7c7;
 }
 
 @media only screen and (max-width: 1440px) {
     .song-button {
         width: 80vw;
-        height: 20vh;
+        height: 10vh;
         margin-left: 10vw;
         margin-top: 1vh;
         border: 2px solid black;
@@ -80,4 +114,8 @@
         white-space: nowrap;
         overflow: hidden;
     }
+}
+
+.chord-v1 {
+    background-color: #00dcff1c;
 }

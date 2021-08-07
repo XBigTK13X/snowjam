@@ -35,5 +35,5 @@ app.all('*', (req, res) => {
 })
 
 app.listen(port, '0.0.0.0', () => {
-    console.log(`Snowjam version 1.0.0 listening at http://0.0.0.0:${port}`)
+    console.log(`Snowjam version 1.0.1 listening at http://0.0.0.0:${port}`)
 })
