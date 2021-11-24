@@ -1,6 +1,6 @@
 {
   "name": "snowjam",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "main": "server/server.js",
   "author": "XBigTK13X <xbigtk13x@gmail.com>",
   "license": "MIT",

@@ -19,7 +19,10 @@ class ApiClient {
         })
     }
 
-    getSongList() {
+    getSongList(searchFilter) {
+        if (searchFilter) {
+            return this.get('/api/song/list?searchFilter=' + searchFilter)
+        }
         return this.get('/api/song/list')
     }
 
@@ -35,11 +38,20 @@ let navbar = `<div class="navbar">
       <a class="nav-button" onclick="window.changeScrollSpeed(-1)">Slower</a>
       <a class="nav-button" onclick="window.toggleScroll()">Autoscroll</a>
       <a class="nav-button" onclick="window.changeScrollSpeed(1)">Faster</a>
+      <br/>
+      <input placeholder="Enter search filter" type="text" name="search-filter" id="search-filter" />
     </div>`
 
 let loadPage = (content) => {
     let markup = `${navbar}<div class="page-content">${content}</div>`
     $('#app-container').html(markup)
+    if (window.searchFilter) {
+        $('#search-filter').val(window.searchFilter)
+        $('#search-filter').trigger('focus')
+    }
+    $('#search-filter').on('input', (e) => {
+        window.location.href = '#search?searchFilter=' + e.target.value
+    })
 }
 
 let ms_per_second = 1000
@@ -90,8 +102,8 @@ window.toggleScroll = () => {
     }
 }
 
-window.loadSongs = () => {
-    client.getSongList().then((response) => {
+window.loadSongs = (searchFilter) => {
+    client.getSongList(searchFilter).then((response) => {
         let markup = `
           <div>
               <h2>Songs</h2>
@@ -142,7 +154,12 @@ const changePage = () => {
         let song_id = window.location.hash.split('song_id=')[1]
         window.loadSong(song_id)
     } else {
-        window.loadSongs()
+        if (window.location.hash && window.location.hash.indexOf('#search?') !== -1) {
+            window.searchFilter = window.location.hash.split('searchFilter=')[1]
+            window.loadSongs(window.searchFilter)
+        } else {
+            window.loadSongs()
+        }
     }
 }
 

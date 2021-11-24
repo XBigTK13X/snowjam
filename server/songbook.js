@@ -83,6 +83,8 @@ class Song {
         this.file_path = file_path
         this.is_chord_v1 = this.file_path.indexOf('.v1chord') !== -1
         this.id = crypto.createHash('md5').update(file_path).digest('hex')
+
+        this.searchSlug = this.title.toLowerCase() + this.artist.toLowerCase() + this.collection.toLowerCase()
     }
 }
 
@@ -107,7 +109,28 @@ class Songbook {
                 return this.songs.lookup[a].artist < this.songs.lookup[b].artist ? -1 : 1
             })
         }
-        this.getSongList = () => {
+        this.searchSongs = (searchFilter) => {
+            let songLookup = {}
+            searchFilter = searchFilter.toLowerCase()
+            let songList = this.songs.list.filter((x) => {
+                let song = this.songs.lookup[x]
+                return song.searchSlug.indexOf(searchFilter) !== -1
+            })
+            songList.forEach((songId) => {
+                songLookup[songId] = this.songs.lookup[songId]
+            })
+
+            return {
+                songs: {
+                    list: songList,
+                    lookup: songLookup,
+                },
+            }
+        }
+        this.getSongList = (searchFilter) => {
+            if (searchFilter) {
+                return this.searchSongs(searchFilter)
+            }
             return { songs: this.songs }
         }
         this.getSong = async (song_id) => {
