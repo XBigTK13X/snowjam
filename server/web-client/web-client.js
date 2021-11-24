@@ -65,6 +65,7 @@ window.jumpToTop = () => {
     window.scroll(0, 0)
     if (scroll_interval) {
         clearInterval(scroll_interval)
+        scroll_interval = null
     }
 }
 
@@ -86,6 +87,7 @@ window.changeScrollSpeed = (direction) => {
             scroll_refresh_rate = 1000
         }
         clearInterval(scroll_interval)
+        scroll_interval = null
     }
     scroll()
 
@@ -95,6 +97,7 @@ window.changeScrollSpeed = (direction) => {
 window.toggleScroll = () => {
     if (scroll_interval) {
         clearInterval(scroll_interval)
+        scroll_interval = null
     } else {
         scroll_refresh_rate = scroll_refresh_rate_start
         scroll()
@@ -103,6 +106,7 @@ window.toggleScroll = () => {
 }
 
 window.loadSongs = (searchFilter) => {
+    window.jumpToTop()
     client.getSongList(searchFilter).then((response) => {
         let markup = `
           <div>
@@ -124,6 +128,7 @@ window.loadSongs = (searchFilter) => {
 }
 
 window.loadSong = (song_id) => {
+    window.jumpToTop()
     client.getSong(song_id).then((response) => {
         let song = response.song
         let song_markup = song.content.html
