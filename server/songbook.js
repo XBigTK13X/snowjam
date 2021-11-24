@@ -77,6 +77,9 @@ class Song {
             this.collection = parts[parts.length - 3]
         }
 
+        this.title = this.title.replace('_', "'")
+        this.artist = this.artist.replace('_', "'")
+
         this.file_path = file_path
         this.is_chord_v1 = this.file_path.indexOf('.v1chord') !== -1
         this.id = crypto.createHash('md5').update(file_path).digest('hex')

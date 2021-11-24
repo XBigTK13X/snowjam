@@ -22,11 +22,7 @@ const getFiles = (path) => {
 const getFilesRecursively = (path) => {
     let dirs = getDirectories(path)
     let files = dirs.map((dir) => getFilesRecursively(dir)).reduce((a, b) => a.concat(b), [])
-    let results = files.concat(getFiles(path))
-    return results.map((result) => {
-        //TODO I don't know why nodejs is returning the file paths with single quote converted to underscore
-        return result.replace(/_/g, "'")
-    })
+    return files.concat(getFiles(path))
 }
 
 module.exports = {

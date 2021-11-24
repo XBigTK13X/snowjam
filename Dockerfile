@@ -4,10 +4,10 @@ EXPOSE 24072
 
 COPY package.json package.json
 
-COPY yarn.lock yarn.lock
+COPY package-lock.json package-lock.json
 
-RUN yarn install
+RUN npm install
 
 COPY server server
 
-CMD yarn develop
+CMD npm run develop
