@@ -148,7 +148,7 @@ class Songbook {
                             version: chord_data_v1.version,
                         }
                     }
-                    const data_html = raw_text.replace(/(?:\r\n|\r|\n)/g, '<br>')
+                    let data_html = '<br/>' + raw_text.replace(/(?:\r\n|\r|\n)/g, '<br>')
                     resolve({
                         song: {
                             info: this.songs.lookup[song_id],

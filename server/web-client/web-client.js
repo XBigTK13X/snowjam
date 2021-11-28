@@ -42,6 +42,17 @@ let navbar = `<div class="navbar">
       <input placeholder="Enter search filter" type="text" name="search-filter" id="search-filter" />
     </div>`
 
+let debounceTimeout = null
+let debounceMilliseconds = 500
+let debounceNavigate = (url) => {
+    if (debounceTimeout !== null) {
+        clearTimeout(debounceTimeout)
+    }
+    debounceTimeout = setTimeout(() => {
+        window.location.href = url
+    }, debounceMilliseconds)
+}
+
 let loadPage = (content) => {
     let markup = `${navbar}<div class="page-content">${content}</div>`
     $('#app-container').html(markup)
@@ -50,11 +61,10 @@ let loadPage = (content) => {
         $('#search-filter').trigger('focus')
     }
     $('#search-filter').on('input', (e) => {
-        window.location.href = '#search?searchFilter=' + e.target.value
+        debounceNavigate('#search?searchFilter=' + e.target.value)
     })
 }
 
-let ms_per_second = 1000
 let scroll_pixels_per_refresh = 2
 let scroll_refresh_rate_start = 100
 let scroll_refresh_rate = 100
@@ -137,7 +147,9 @@ window.loadSong = (song_id) => {
             song_markup = song.chord_data.html
             chord_info = `
             <pre class="song-content">
+                <span>
                 ${song.chord_data.sorted_chords}
+                </span>
             </pre>
             `
         }
@@ -148,7 +160,9 @@ window.loadSong = (song_id) => {
     <h3>Chords</h3>
     ${chord_info}
     <pre class="song-content">
-        ${song_markup}
+        <span>
+            ${song_markup}
+        </span>
     </pre>`
         loadPage(markup)
     })
