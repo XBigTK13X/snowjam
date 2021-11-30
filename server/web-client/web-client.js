@@ -58,7 +58,6 @@ let loadPage = (content) => {
     $('#app-container').html(markup)
     if (window.searchFilter) {
         $('#search-filter').val(window.searchFilter)
-        $('#search-filter').trigger('focus')
     }
     $('#search-filter').on('input', (e) => {
         debounceNavigate('#search?searchFilter=' + e.target.value)
