@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "version": "1.2.2",
+    "scheme": "com.simplepathstudios.snowjam",
+    "newArchEnabled": true,
+    "plugins": [
+      [
+        "@react-native-tvos/config-tv",
+        {
+          "androidTVBanner": "./assets/icon/android/tvbanner.png"
+        }
+      ],
+      "expo-secure-store",
+      "react-native-video",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          },
+          "ios": {}
+        }
+      ]
+    ],
+    "splash": {
+      "image": "./assets/icon/splash.png",
+      "backgroundColor": "#ff9a3f"
+    },
+    "icon": "./assets/icon/appicon.png",
+    "name": "snowjam",
+    "slug": "snowjam",
+    "orientation": "landscape",
+    "android": {
+      "package": "com.simplepathstudios.snowjam",
+      "edgeToEdgeEnabled": true,
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "bundleIdentifier": "com.simplepathstudios.snowjam"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e0fc4a42-5cc7-4ba9-b251-8383cf957527"
+      }
+    }
+  }
+}
