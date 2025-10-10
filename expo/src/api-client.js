@@ -96,9 +96,6 @@ export class ApiClient {
         this.handleError = (err) => {
             util.log(err)
             if (err) {
-                if (err.response && err.response.status === 401) {
-                    details.onLogout()
-                }
                 if (err.code && err.code === 'ERR_NETWORK') {
                     if (!self.apiErrorSent) {
                         self.onApiError(err)

@@ -1,6 +1,6 @@
 .kotlin/
 db-dump/
-.snowstream/
+.snowjam/
 release/
 build-out/
 keystore.properties

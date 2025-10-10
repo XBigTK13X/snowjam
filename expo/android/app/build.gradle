@@ -4,7 +4,7 @@ apply plugin: "com.facebook.react"
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
-def keystorePropertiesFile = System.getenv('SNOWSTREAM_KEYSTORE_PROPS')
+def keystorePropertiesFile = System.getenv('SNOWJAM_KEYSTORE_PROPS')
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 

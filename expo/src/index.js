@@ -1,6 +1,3 @@
-import PlayerContext from './player-context'
-export { PlayerContextProvider, usePlayerContext } from './player-context'
-
 import AppContext from './app-context'
 export { AppContextProvider, useAppContext } from './app-context'
 
@@ -16,7 +13,6 @@ export { config } from './settings'
 export default {
     AppContext,
     C,
-    PlayerContext,
     Util,
     config
 }

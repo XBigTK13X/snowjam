@@ -28,7 +28,7 @@ with open('expo/android/app/build.gradle','r',encoding="utf-8") as read_handle:
     for line in read_handle.readlines():
         if 'def projectRoot' in line:
             line += '''
-def keystorePropertiesFile = System.getenv('SNOWSTREAM_KEYSTORE_PROPS')
+def keystorePropertiesFile = System.getenv('SNOWJAM_KEYSTORE_PROPS')
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 '''
