@@ -27,11 +27,9 @@ function PageWrapper(props) {
 }
 
 export default function PageLoader() {
-    console.log({ routes, pages })
     return (
         <Snow.App
-            DEBUG_FOCUS={config.debugFocus}
-            DEBUG_NAVIGATION={config.debugNavigation}
+            DEBUG_SNOW={config.debugSnow}
             snowStyle={appStyle}
             routePaths={routes}
             routePages={pages}

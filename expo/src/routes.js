@@ -1,7 +1,9 @@
 export var routes = {
+    gameList: '/game/list',
     landing: '/landing',
-    browse: '/browse',
+    seriesList: '/series/list',
     search: '/search',
+    songList: '/song/list'
 }
 
 export function QuietReactWarning() {

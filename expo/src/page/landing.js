@@ -16,7 +16,7 @@ export default function LandingPage() {
     return (
         <C.View>
             <C.SnowGrid itemsPerRow={2}>
-                <C.SnowTextButton title="Browse" onPress={navPush(routes.browse, true)} />
+                <C.SnowTextButton title="Series List" onPress={navPush(routes.seriesList, true)} />
                 <C.SnowTextButton title="Search" onPress={navPush(routes.search, true)} />
             </C.SnowGrid>
             <C.SnowText style={styles.footer} center>{`v${config.clientVersion} - built ${config.clientBuildDate}`}</C.SnowText>

@@ -8,8 +8,9 @@ class Config {
         this.clientBuildDate = "October 08, 2025"
         this.clientDevBuildNumber = 1
 
-        this.debugFocus = null
-        this.debugNavigation = true
+        this.webApiUrl = this.vondoomWebApiUrl
+
+        this.debugSnow = false
     }
 }
 

@@ -21,37 +21,11 @@ export function useAppContext() {
 export function AppContextProvider(props) {
     const { SnowStyle, navPush } = Snow.useSnowContext(props)
     const [apiError, setApiError] = React.useState(null)
-    const [apiClient, setApiClient] = React.useState(null)
-    const [apiClientKey, setApiClientKey] = React.useState(1)
     const [session, setSession] = React.useState(null)
     const [sessionLoaded, setSessionLoaded] = React.useState(false)
     const [isAdmin, setIsAdmin] = React.useState(false)
     const [displayName, setDisplayName] = React.useState(null)
     const [isLoading, setIsLoading] = React.useState(true)
-    const [clientOptions, setClientOptions] = React.useState(null)
-
-    React.useEffect(() => {
-        if (!apiClient) {
-            const storedSession = Snow.loadData('session')
-            setSession(storedSession)
-            const storedAdmin = Snow.loadData('isAdmin')
-            setIsAdmin(storedAdmin)
-            setDisplayName(Snow.loadData('displayName'))
-            const storedWebApiUrl = Snow.loadData('webApiUrl')
-            setIsLoading(false)
-            if (storedWebApiUrl) {
-                setApiClient(new ApiClient({
-                    webApiUrl: storedWebApiUrl,
-                    authToken: storedSession,
-                    isAdmin: storedAdmin,
-                    onApiError: onApiError
-                }))
-                setApiClientKey((prev) => { return prev + 1 })
-            }
-            setSessionLoaded(true)
-        }
-    }, [apiClient, sessionLoaded])
-
 
     const onApiError = (err) => {
         if (!apiError) {
@@ -59,15 +33,12 @@ export function AppContextProvider(props) {
         }
     }
 
-    const logout = () => { }
+    const apiClient = new ApiClient({
+        webApiUrl: config.webApiUrl,
+        onApiError: onApiError
+    })
 
-    const setWebApiUrl = (webApiUrl) => {
-        return Snow.saveData('webApiUrl', webApiUrl)
-            .then(() => {
-                setApiClient(null)
-                setApiClientKey((prev) => { return prev + 1 })
-            })
-    }
+    const logout = () => { }
 
     if (apiError) {
         return (
@@ -91,9 +62,6 @@ export function AppContextProvider(props) {
         sessionLoaded,
         isLoading,
         apiClient,
-        isAdmin,
-        displayName,
-        setWebApiUrl,
     }
 
     return (

@@ -7,16 +7,9 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-import auth
 import routes
 from settings import config
 config.validate(log)
-
-from snow_media.transcode_sessions import transcode_sessions
-
-transcode_sessions.cleanup()
-
-transcode_sessions.register_cleanup()
 
 app = FastAPI(
     title="snowstream",
@@ -57,8 +50,7 @@ if not os.environ.get("SNOWSTREAM_WEB_API_URL"):
         return config.frontend_url
 
 
-auth.register(router=api_router)
-routes.register(router=api_router)
+routes.register(app=app,router=api_router)
 
 app.include_router(api_router)
 
