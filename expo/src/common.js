@@ -49,6 +49,8 @@ const isWeb = Platform.OS === 'web'
 const isAndroid = Platform.OS === 'android'
 const isTV = Platform.isTV
 
+import DownloadButton from './comp/download-button'
+
 export default {
     findNodeHandle,
     isAndroid,
@@ -61,6 +63,7 @@ export default {
     useTVEventHandler,
     util,
     AppState,
+    DownloadButton,
     FillView: SnowFillView,
     Image,
     Linking,

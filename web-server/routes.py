@@ -1,6 +1,8 @@
 import os
 import uuid
 
+from fastapi.responses import FileResponse
+
 from settings import config
 import api_models as am
 
@@ -77,6 +79,7 @@ def rescan(app):
                 kind = 'midi'
             elif '.mus' in file_path:
                 kind = 'mus'
+            print(f'{song_key} - {kind} - {file_path}')
             lookup[series_id][game_id][song_id][kind] = file_path
 
     app.state.lookup = lookup
@@ -126,5 +129,19 @@ def register(app,router):
             'game': app.state.lookup['game_reverse'][game_id],
             'series': app.state.lookup['series_reverse'][series_id]
         }
+
+    @router.get('/song/file')
+    def get_song_file(series_id:str,game_id:str,song_id:str,kind:str):
+        details = app.state.lookup[series_id][game_id][song_id]
+        file_path = details[kind]
+        print(file_path)
+        print(kind)
+        if not os.path.exists(file_path):
+            return {"error": f"File not found {file_path}"}
+        response = FileResponse(file_path, filename=os.path.basename(file_path))
+        response.headers["Cache-Control"] = "no-store"
+        return response
+
+
     return router
 

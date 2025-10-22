@@ -1,4 +1,5 @@
 import { C } from 'snowjam'
+import DownloadButton from '../comp/download-button'
 
 export default function SongListPage() {
     const { routes, config, apiClient } = C.useAppContext()
@@ -9,7 +10,7 @@ export default function SongListPage() {
     const [series, setSeries] = C.React.useState(null)
     const [game, setGame] = C.React.useState(null)
     const [song, setSong] = C.React.useState(null)
-    const [songDetails, setSongDetails] = C.React.useState()
+    const [songDetails, setSongDetails] = C.React.useState(null)
 
     C.React.useEffect(() => {
         apiClient.getSongDetails(seriesId, gameId, songId).then((response) => {
@@ -24,12 +25,14 @@ export default function SongListPage() {
         return null
     }
 
+    let kinds = Object.keys(songDetails)
+    kinds.sort()
     return (
         <>
             <C.SnowHeader center>{series}</C.SnowHeader>
             <C.SnowHeader center>{game}</C.SnowHeader>
             <C.SnowHeader center>{song}</C.SnowHeader>
-            {Object.keys(songDetails).map((kind) => {
+            <C.SnowGrid itemsPerRow={3} items={kinds} renderItem={(kind) => {
                 let name = 'Sheet Music (pdf)'
                 if (kind === 'midi') {
                     name = 'Synthesia (mid)'
@@ -37,8 +40,16 @@ export default function SongListPage() {
                 else if (kind === 'mus') {
                     name = 'Finale Source (mus)'
                 }
-                return <C.SnowTextButton title={name} onPress={() => { }} />
-            })}
+                const fileUrl = apiClient.getSongFileUrl(seriesId, gameId, songId, kind)
+                return (
+                    <DownloadButton
+                        title={name}
+                        fileUrl={fileUrl}
+                        fileName={`${song}.${kind}`}
+                        subDir={`${series}/${game}`}
+                    />
+                )
+            }} />
         </>
     )
 }

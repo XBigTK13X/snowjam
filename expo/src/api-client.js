@@ -97,6 +97,10 @@ export class ApiClient {
         return this.get(`/song?series_id=${seriesId}&game_id=${gameId}&song_id=${songId}`)
     }
 
+    getSongFileUrl(seriesId, gameId, songId, kind) {
+        return this.baseURL + `/song/file?series_id=${seriesId}&game_id=${gameId}&song_id=${songId}&kind=${kind}`
+    }
+
     debug() {
         util.log({ baseURL: this.baseURL })
     }
