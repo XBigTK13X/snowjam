@@ -2,13 +2,13 @@ class Config {
     constructor() {
         this.vondoomWebApiUrl = 'http://192.168.101.10:8000' // Desktop
         this.stormWebApiUrl = 'http://192.168.101.30:8000' // Laptop
-        this.beastWebApiUrl = 'http://beast.9914.us:9063' // Prod
+        this.beastWebApiUrl = 'http://beast.9914.us:9073' // Prod
 
-        this.clientVersion = "1.2.2"
+        this.clientVersion = "1.0.0"
         this.clientBuildDate = "October 08, 2025"
         this.clientDevBuildNumber = 1
 
-        this.webApiUrl = this.vondoomWebApiUrl
+        this.webApiUrl = this.beastWebApiUrl
 
         this.debugSnow = false
     }

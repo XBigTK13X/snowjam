@@ -9,10 +9,10 @@ set -e
 ./gradlew assembleRelease
 set +e
 #./gradlew release
-cp app/build/outputs/apk/release/app-release.apk build-out/snowstream-mobile.apk
+cp app/build/outputs/apk/release/app-release.apk build-out/snowjam-mobile.apk
 export EXPO_TV=1
 set -e
 ./gradlew assembleRelease
 set +e
 #./gradlew release
-cp app/build/outputs/apk/release/app-release.apk build-out/snowstream-tv.apk
+cp app/build/outputs/apk/release/app-release.apk build-out/snowjam-tv.apk

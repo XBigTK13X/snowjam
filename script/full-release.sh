@@ -18,7 +18,7 @@ script/docker-build.sh push
 set +e
 
 echo "=-=- Running the latest version container on beast -=-="
-ssh access@beast.9914.us "bash -c \"cd /mnt/docker; ./on/snowstream.sh\""
+ssh access@beast.9914.us "bash -c \"cd /mnt/docker; ./on/snowjam.sh\""
 
 fi
 
@@ -30,10 +30,10 @@ script/prod-generate-apks.sh
 set +e
 
 echo "=-=- Push the apks up to the file server -=-="
-~/script/push-apks.sh snowstream
+~/script/push-apks.sh snowjam
 
 echo "=-=- Deploy the apks to all devices -=-="
-~/script/remote-adb.py All deploy_snowstream
+~/script/remote-adb.py All deploy_snowjam
 
 fi
 

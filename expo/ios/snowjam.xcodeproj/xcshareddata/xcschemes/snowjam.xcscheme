@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "snowstream.app"
-               BlueprintName = "snowstream"
-               ReferencedContainer = "container:snowstream.xcodeproj">
+               BuildableName = "snowjam.app"
+               BlueprintName = "snowjam"
+               ReferencedContainer = "container:snowjam.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "snowstreamTests.xctest"
-               BlueprintName = "snowstreamTests"
-               ReferencedContainer = "container:snowstream.xcodeproj">
+               BuildableName = "snowjamTests.xctest"
+               BlueprintName = "snowjamTests"
+               ReferencedContainer = "container:snowjam.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "snowstream.app"
-            BlueprintName = "snowstream"
-            ReferencedContainer = "container:snowstream.xcodeproj">
+            BuildableName = "snowjam.app"
+            BlueprintName = "snowjam"
+            ReferencedContainer = "container:snowjam.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "snowstream.app"
-            BlueprintName = "snowstream"
-            ReferencedContainer = "container:snowstream.xcodeproj">
+            BuildableName = "snowjam.app"
+            BlueprintName = "snowjam"
+            ReferencedContainer = "container:snowjam.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

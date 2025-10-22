@@ -1,5 +1,7 @@
 FROM python:3.12-trixie
 
+RUN DEBIAN_FRONTEND=noninteractive apt update
+
 # internal container process management
 RUN DEBIAN_FRONTEND=noninteractive apt install -y supervisor
 # web server
@@ -7,7 +9,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y nginx
 # sudo helper
 RUN DEBIAN_FRONTEND=noninteractive apt install -y gosu
 
-RUN systemctl disable nginx
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 COPY ./web-server/requirements.txt /app/requirements.txt
@@ -19,7 +20,6 @@ RUN rm -rf /app/.snowjam
 COPY ./docker /app/docker
 COPY ./script /app/script
 COPY ./expo/dist /app/prod-frontend
-COPY docker/alembic.ini /app/alembic.ini
 RUN chmod -R 777 /app/script
 RUN chmod -R 777 /app/docker
 RUN mkdir /docker-entrypoint-initdb.d

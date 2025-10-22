@@ -4,7 +4,7 @@ import sys
 
 class Config:
     def __init__(self):
-        self.server_version = "1.2.2"
+        self.server_version = "1.0.0"
         self.server_build_date = "October 08, 2025"
         self.server_build_dev_number = 1
         self.app_data_dir = '.snowjam/'
@@ -12,7 +12,7 @@ class Config:
         self.frontend_url = "http://localhost:3000"
         self.is_deployed_environment = None
         self.web_api_url = "http://localhost:8000"
-        self.web_media_url = "<need_to_set_an_env_var-SNOWSTREAM_WEB_MEDIA_URL>"
+        self.web_media_url = "<need_to_set_an_env_var-SNOWJAM_WEB_MEDIA_URL>"
         self.log_file_path = '.snowjam/log/snowjam.log'
 
         self.media_dir = "/mnt/j-media/snowjam"

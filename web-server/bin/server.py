@@ -12,7 +12,7 @@ from settings import config
 config.validate(log)
 
 app = FastAPI(
-    title="snowstream",
+    title="snowjam",
     version=f"{config.server_version}",
     swagger_ui_parameters={
         "syntaxHighlight": False,
@@ -44,7 +44,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 api_router = APIRouter(prefix="/api")
 
-if not os.environ.get("SNOWSTREAM_WEB_API_URL"):
+if not os.environ.get("SNOWJAM_WEB_API_URL"):
     @app.get("/", response_class=RedirectResponse, include_in_schema=False)
     def serve_web_app():
         return config.frontend_url
@@ -54,4 +54,4 @@ routes.register(app=app,router=api_router)
 
 app.include_router(api_router)
 
-log.info(f"snowstream server v{config.server_version} [{config.server_build_dev_number}] built {config.server_build_date} now running.")
+log.info(f"snowjam server v{config.server_version} [{config.server_build_dev_number}] built {config.server_build_date} now running.")
