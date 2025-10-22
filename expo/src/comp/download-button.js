@@ -18,7 +18,7 @@ async function getOrPickAndroidDirectory() {
     return perms.directoryUri;
 }
 
-const DownloadButton = (props) => {
+const DownloadButton = (props) => {expo
     if (Platform.OS === 'web') {
         const href = useMemo(() => {
             const sep = props.fileUrl.includes('?') ? '&' : '?';
