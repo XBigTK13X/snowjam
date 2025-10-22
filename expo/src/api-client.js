@@ -85,12 +85,16 @@ export class ApiClient {
         return this.get('/series/list')
     }
 
-    getGameList(series) {
-        return this.get(`/game/list?series_name=${series}`)
+    getGameList(seriesId) {
+        return this.get(`/game/list?series_id=${seriesId}`)
     }
 
-    getSongList(game) {
-        return this.get(`/song/list?game_name=${game}`)
+    getSongList(seriesId, gameId) {
+        return this.get(`/song/list?series_id=${seriesId}&game_id=${gameId}`)
+    }
+
+    getSongDetails(seriesId, gameId, songId) {
+        return this.get(`/song?series_id=${seriesId}&game_id=${gameId}&song_id=${songId}`)
     }
 
     debug() {

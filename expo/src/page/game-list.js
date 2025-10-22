@@ -4,20 +4,28 @@ export default function GameListPage() {
     const { routes, config, apiClient } = C.useAppContext()
     const { SnowStyle, navPush, currentRoute } = C.useSnowContext()
 
-    const [gameList, setGameList] = C.React.useState()
+    const { seriesId } = currentRoute.routeParams
+
+    const [series, setSeries] = C.React.useState(null)
+    const [gameList, setGameList] = C.React.useState(null)
 
     C.React.useEffect(() => {
-        if (!gameList) {
-            console.log({ currentRoute })
-            apiClient.getGameList(currentRoute.routeParams.series).then((response) => {
-                setGameList(response)
-            })
-        }
-    }, [gameList, apiClient])
+        apiClient.getGameList(seriesId).then((response) => {
+            setGameList(response.game_list)
+            setSeries(response.series)
+        })
+    }, [])
+
+    if (!series || !gameList) {
+        return null
+    }
 
     return (
-        <C.SnowGrid itemsPerRow={4} items={gameList} renderItem={(item) => {
-            return <C.SnowTextButton title={item} onPress={navPush(routes.songList, { game: item }, true)} />
-        }} />
+        <>
+            <C.SnowHeader center>{series}</C.SnowHeader>
+            <C.SnowGrid itemsPerRow={4} items={gameList} renderItem={(item) => {
+                return <C.SnowTextButton title={item.name} onPress={navPush(routes.songList, { seriesId, gameId: item.id }, true)} />
+            }} />
+        </>
     )
 }

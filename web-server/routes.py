@@ -1,15 +1,25 @@
 import os
+import uuid
 
 from settings import config
 import api_models as am
 
+import hashlib
+
+def hash(input):
+    return hashlib.md5(input.encode()).hexdigest()
+
+
 def rescan(app):
-    series_lookup = {}
-    series_list = []
-    game_lookup = {}
-    game_list = []
-    song_lookup = {}
-    song_list = []
+    lookup = {
+        'series_list': [],
+        'series_id': {},
+        'series_reverse': {},
+        'game_id': {},
+        'game_reverse': {},
+        'song_id': {},
+        'song_reverse': {}
+    }
 
     for root,dirs,files in os.walk(config.media_dir):
         for ff in files:
@@ -21,37 +31,55 @@ def rescan(app):
                 continue
 
             series = parts[0]
-            if not series in series_lookup:
-                series_lookup[series] = {}
-                series_list.append(series)
+            series_id = None
+            if not series in lookup['series_id']:
+                series_id = hash(series)
+                lookup['series_id'][series] = series_id
+                lookup['series_reverse'][series_id] = series
+                lookup[series_id] = {}
+                lookup['series_list'].append({'name':series, 'id': series_id})
+                lookup['series_list'].sort(key=lambda xx: xx['name'])
+            else:
+                series_id = lookup['series_id'][series]
 
             game = parts[1]
-            if not game in game_lookup:
-                game_lookup[game] = {}
-                game_list.append(game)
-            series_lookup[series][game] = game
+            if not 'game_list' in lookup[series_id]:
+                lookup[series_id]['game_list'] = []
+            game_id = None
+            game_key = series+game
+            if not game_key in lookup['game_id']:
+                game_id = hash(game)
+                lookup['game_id'][game_key] = game_id
+                lookup['game_reverse'][game_id] = game
+                lookup[series_id][game_id] = {}
+                lookup[series_id]['game_list'].append({'name':game,'id': game_id})
+                lookup[series_id]['game_list'].sort(key=lambda xx: xx['name'])
+            else:
+                game_id = lookup['game_id'][game_key]
 
             song = parts[2]
-            if not song in song_lookup:
-                song_lookup[song] = True
-                song_list.append(song)
-            game_lookup[game][song] = file_path
+            if not 'song_list' in lookup[series_id][game_id]:
+                lookup[series_id][game_id]['song_list'] = []
+            song_id = None
+            song_key = series+game+song
+            if not song_key in lookup['song_id']:
+                song_id = hash(song)
+                lookup['song_id'][song_key] = song_id
+                lookup['song_reverse'][song_id] = song
+                lookup[series_id][game_id][song_id] = {}
+                lookup[series_id][game_id]['song_list'].append({'name':song, 'id': song_id})
+                lookup[series_id][game_id]['song_list'].sort(key=lambda xx: xx['name'])
+            else:
+                song_id = lookup['song_id'][song_key]
 
-    series_list.sort()
-    game_list.sort()
-    song_list.sort()
+            kind = 'pdf'
+            if '.mid' in file_path:
+                kind = 'midi'
+            elif '.mus' in file_path:
+                kind = 'mus'
+            lookup[series_id][game_id][song_id][kind] = file_path
 
-    app.state.list = {
-        'series': series_list,
-        'game': game_list,
-        'song': song_list
-    }
-
-    app.state.lookup = {
-        'series': series_lookup,
-        'game': game_lookup,
-        'song': song_lookup
-    }
+    app.state.lookup = lookup
 
 def register(app,router):
     rescan(app)
@@ -73,20 +101,30 @@ def register(app,router):
 
     @router.get("/series/list")
     def get_series_list():
-        return app.state.list['series']
+        return app.state.lookup['series_list']
 
     @router.get("/game/list")
-    def get_game_list(series_name:str):
-        result = list(app.state.lookup['series'][series_name].keys())
-        result.sort()
-        return result
+    def get_game_list(series_id:str):
+        return {
+            'game_list': app.state.lookup[series_id]['game_list'],
+            'series': app.state.lookup['series_reverse'][series_id]
+        }
 
     @router.get('/song/list')
-    def get_song_list(game_name:str):
-        result = list(app.state.lookup['game'][game_name].keys())
-        result.sort()
-        return result
+    def get_song_list(series_id:str,game_id:str):
+        return {
+            'song_list': app.state.lookup[series_id][game_id]['song_list'],
+            'game': app.state.lookup['game_reverse'][game_id],
+            'series': app.state.lookup['series_reverse'][series_id]
+        }
 
-
+    @router.get('/song')
+    def get_song_details(series_id:str,game_id:str,song_id:str):
+        return {
+            'details': app.state.lookup[series_id][game_id][song_id],
+            'song': app.state.lookup['song_reverse'][song_id],
+            'game': app.state.lookup['game_reverse'][game_id],
+            'series': app.state.lookup['series_reverse'][series_id]
+        }
     return router
 

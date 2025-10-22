@@ -3,7 +3,8 @@ export var routes = {
     landing: '/landing',
     seriesList: '/series/list',
     search: '/search',
-    songList: '/song/list'
+    songList: '/song/list',
+    songDetails: '/song/details'
 }
 
 export function QuietReactWarning() {
