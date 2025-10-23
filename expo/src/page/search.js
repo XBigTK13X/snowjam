@@ -76,7 +76,7 @@ export default function SeriesListPage() {
     return (
         <>
             <C.SnowLabel>Search</C.SnowLabel>
-            <C.SnowInput focusKey="search-query" focusStart value={query} onValueChange={setQuery} onDebounce={performSearch} />
+            <C.SnowInput focusKey="search-query" value={query} onValueChange={setQuery} onDebounce={performSearch} />
             {resultTabs}
             {hasResults === false && query ? <C.SnowHeader center>No results found for [{query}].</C.SnowHeader> : null}
         </>

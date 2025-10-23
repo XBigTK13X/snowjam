@@ -12,6 +12,7 @@ npx yarn install
 
 cd android
 rm -rf build/
+rm -rf app/.cxx
 ./gradlew clean
 
 cd ../..

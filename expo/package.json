@@ -1,6 +1,6 @@
 {
     "name": "snowjam",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "dependencies": {
         "axios": "1.12.2",
         "expo": "^54.0.13",
@@ -16,6 +16,7 @@
         "react-dom": "19.1.0",
         "react-native": "npm:react-native-tvos@0.81.4-0",
         "react-native-blob-util": "^0.22.2",
+        "react-native-saf-x": "^2.2.3",
         "react-native-safe-area-context": "5.6.1",
         "react-native-screens": "4.16.0",
         "react-native-uuid": "2.0.3",
