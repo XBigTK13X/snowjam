@@ -32,9 +32,6 @@ set +e
 echo "=-=- Push the apks up to the file server -=-="
 ~/script/push-apks.sh snowjam
 
-echo "=-=- Deploy the apks to all devices -=-="
-~/script/remote-adb.py All deploy_snowjam
-
 fi
 
 unset NODE_ENV

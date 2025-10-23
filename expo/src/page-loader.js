@@ -23,6 +23,12 @@ let appStyle = {
 }
 
 appStyle.component = {
+    input: {
+        text: {
+            height: 80,
+            fontSize: 40
+        }
+    },
     textButton: {
         wrapper: {
             height: 80
@@ -32,23 +38,56 @@ appStyle.component = {
 
 function NavControls(props) {
     const { currentRoute, navPush } = Snow.useSnowContext()
-    const seriesId = currentRoute?.routeParams?.seriesId
-    const gameId = currentRoute?.routeParams?.gameId
+    const { seriesId, seriesName, gameId, gameName, songId, songName } = currentRoute.routeParams
 
-    console.log({
-        currentRoute
-    })
-    if (currentRoute.routePath === routes.landing || currentRoute.routePath === routes.search) {
+    if (currentRoute.routePath === routes.landing || currentRoute.routePath === '/') {
         return props.children
     }
-    let homeButton = <Snow.TextButton title="Home" onPress={navPush(routes.landing, true)} />
+    let homeButton = <Snow.TextButton focusKey="nav-home-button" title="Home" onPress={navPush(routes.landing, true)} />
     let seriesButton = null
     if (seriesId) {
-        seriesButton = <Snow.TextButton title="Series" onPress={navPush(routes.gameList, { seriesId }, true)} />
+        seriesButton = (
+            <>
+                <Snow.Break />
+                <Snow.Label center>Series</Snow.Label>
+                <Snow.TextButton focusKey="nav-series-button" title={`${seriesName}`} onPress={navPush(routes.gameList, {
+                    seriesId,
+                    seriesName
+                }, true)} />
+            </>
+        )
     }
     let gameButton = null
     if (gameId) {
-        gameButton = <Snow.TextButton title="Game" onPress={navPush(routes.songList, { seriesId, gameId }, true)} />
+        gameButton = (
+            <>
+                <Snow.Break />
+                <Snow.Label center>Game</Snow.Label>
+                <Snow.TextButton focusKey="nav-game-button" title={`${gameName}`} onPress={navPush(routes.songList, {
+                    seriesId,
+                    seriesName,
+                    gameId,
+                    gameName
+                }, true)} />
+            </>
+        )
+    }
+    let songButton = null
+    if (songId) {
+        songButton = (
+            <>
+                <Snow.Break />
+                <Snow.Label center>Song</Snow.Label>
+                <Snow.TextButton focusKey="nav-song-button" title={`${songName}`} onPress={navPush(routes.songDetails, {
+                    seriesId,
+                    seriesName,
+                    gameId,
+                    gameName,
+                    songId,
+                    songName
+                }, true)} />
+            </>
+        )
     }
     return (
         <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -56,7 +95,7 @@ function NavControls(props) {
                 {homeButton}
                 {seriesButton}
                 {gameButton}
-
+                {songButton}
             </View>
             <Snow.Break vertical />
             <View style={{ width: '80%' }}>

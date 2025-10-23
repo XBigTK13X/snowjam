@@ -86,6 +86,10 @@ export class ApiClient {
         return this.baseURL + `/song/file?series_id=${seriesId}&game_id=${gameId}&song_id=${songId}&kind=${kind}`
     }
 
+    search(query) {
+        return this.get(`/search?query=${query}`)
+    }
+
     debug() {
         util.log({ baseURL: this.baseURL })
     }

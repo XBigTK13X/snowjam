@@ -11,6 +11,8 @@ import hashlib
 def hash(input):
     return hashlib.md5(input.encode()).hexdigest()
 
+def searchify(input):
+    return ''.join(cc.lower() for cc in input if cc.isalnum())
 
 def rescan(app):
     lookup = {
@@ -39,7 +41,11 @@ def rescan(app):
                 lookup['series_id'][series] = series_id
                 lookup['series_reverse'][series_id] = series
                 lookup[series_id] = {}
-                lookup['series_list'].append({'name':series, 'id': series_id})
+                lookup['series_list'].append({
+                    'name': series,
+                    'id': series_id,
+                    'search': searchify(series)
+                })
                 lookup['series_list'].sort(key=lambda xx: xx['name'])
             else:
                 series_id = lookup['series_id'][series]
@@ -54,7 +60,11 @@ def rescan(app):
                 lookup['game_id'][game_key] = game_id
                 lookup['game_reverse'][game_id] = game
                 lookup[series_id][game_id] = {}
-                lookup[series_id]['game_list'].append({'name':game,'id': game_id})
+                lookup[series_id]['game_list'].append({
+                    'name': game,
+                    'id': game_id,
+                    'search': searchify(game)
+                })
                 lookup[series_id]['game_list'].sort(key=lambda xx: xx['name'])
             else:
                 game_id = lookup['game_id'][game_key]
@@ -69,7 +79,11 @@ def rescan(app):
                 lookup['song_id'][song_key] = song_id
                 lookup['song_reverse'][song_id] = song
                 lookup[series_id][game_id][song_id] = {}
-                lookup[series_id][game_id]['song_list'].append({'name':song, 'id': song_id})
+                lookup[series_id][game_id]['song_list'].append({
+                    'name': song,
+                    'id': song_id,
+                    'search': searchify(song)
+                })
                 lookup[series_id][game_id]['song_list'].sort(key=lambda xx: xx['name'])
             else:
                 song_id = lookup['song_id'][song_key]
@@ -79,7 +93,6 @@ def rescan(app):
                 kind = 'midi'
             elif '.mus' in file_path:
                 kind = 'mus'
-            print(f'{song_key} - {kind} - {file_path}')
             lookup[series_id][game_id][song_id][kind] = file_path
 
     app.state.lookup = lookup
@@ -134,14 +147,46 @@ def register(app,router):
     def get_song_file(series_id:str,game_id:str,song_id:str,kind:str):
         details = app.state.lookup[series_id][game_id][song_id]
         file_path = details[kind]
-        print(file_path)
-        print(kind)
         if not os.path.exists(file_path):
             return {"error": f"File not found {file_path}"}
         response = FileResponse(file_path, filename=os.path.basename(file_path))
         response.headers["Cache-Control"] = "no-store"
         return response
 
+    @router.get('/search')
+    def search(query:str):
+        result = {
+            'series':[],
+            'game':[],
+            'song':[]
+        }
+        needle = searchify(query)
+        for series in app.state.lookup['series_list']:
+            if needle in series['search']:
+                result['series'].append(series)
+            for game in app.state.lookup[series['id']]['game_list']:
+                if needle in game['search']:
+                    result['game'].append({'series': series,'game':game})
+                for song in app.state.lookup[series['id']][game['id']]['song_list']:
+                    if needle in song['search']:
+                        result['song'].append({'series': series, 'game': game, 'song': song})
+
+        result['kinds'] = []
+
+        if not result['series']:
+            del result['series']
+        else:
+            result['kinds'].append(f'Series [{len(result["series"])}]')
+        if not result['game']:
+            del result['game']
+        else:
+            result['kinds'].append(f'Game [{len(result["game"])}]')
+        if not result['song']:
+            del result['song']
+        else:
+            result['kinds'].append(f'Song [{len(result["song"])}]')
+
+        return result
 
     return router
 

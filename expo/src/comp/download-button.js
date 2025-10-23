@@ -3,45 +3,65 @@ import { Platform, Alert, PermissionsAndroid } from 'react-native';
 import RNBlobUtil from 'react-native-blob-util';
 import { SnowTextButton } from 'expo-snowui';
 
-const PUBLIC_DIR = '/storage/emulated/0/Download/snowjam';
+const DownloadButton = (props) => {
+    const [title, setTitle] = React.useState(props.title);
 
-async function ensureStoragePermission() {
-    const perms = [
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-    ];
-    for (const p of perms) {
-        const granted = await PermissionsAndroid.request(p);
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-            throw new Error('Permission denied for external storage.');
+    const mimeMap = {
+        pdf: 'application/pdf',
+        mid: 'audio/midi',
+        mus: 'application/octet-stream',
+    };
+
+    const ext = props.fileName.split('.').pop().toLowerCase();
+    const mimeType = mimeMap[ext] || 'application/octet-stream';
+
+    async function ensureStoragePermission() {
+        if (Platform.OS !== 'android') return;
+        const perms = [
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        ];
+        for (const p of perms) {
+            const granted = await PermissionsAndroid.request(p);
+            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                throw new Error('Permission denied for external storage.');
+            }
         }
     }
-}
 
-const DownloadButton = (props) => {
     const onPress = async () => {
+        if (Platform.OS === 'web') return; // handled by <a> below
         try {
             await ensureStoragePermission();
 
             const subDir = props.subDir ? `/${props.subDir}` : '';
-            const targetPath = `${PUBLIC_DIR}${subDir}/${props.fileName}`;
-            console.log('[DownloadButton] Downloading to:', targetPath);
+            const baseDir = RNBlobUtil.fs.dirs.MusicDir || RNBlobUtil.fs.dirs.DownloadDir;
+            const targetPath = `${baseDir}/snowjam${subDir}/${props.fileName}`;
 
             const res = await RNBlobUtil.config({
                 addAndroidDownloads: {
                     useDownloadManager: true,
                     notification: true,
                     path: targetPath,
-                    mime: 'application/pdf', // adjust if needed
+                    mime: mimeType,
                     title: props.fileName,
                     description: 'snowjam download',
                 },
             }).fetch('GET', props.fileUrl);
 
-            console.log('[DownloadButton] ✅ Download complete:', res.path());
-            Alert.alert('Success', `File saved to:\n${targetPath}`);
+            // Trigger MediaStore indexing so Synthesia sees the file
+            try {
+                if (RNBlobUtil.MediaCollection?.scanFile) {
+                    await RNBlobUtil.MediaCollection.scanFile(targetPath);
+                } else if (RNBlobUtil.MediaScanner?.scanFile) {
+                    await RNBlobUtil.MediaScanner.scanFile(targetPath, mimeType);
+                }
+            } catch {
+                // Non-fatal: indexing may not be supported on some devices
+            }
+
+            setTitle(`Saved to ${targetPath}`);
         } catch (err) {
-            console.error('[DownloadButton] ❌ Error:', err);
             Alert.alert('Error', err.message);
         }
     };
@@ -54,12 +74,12 @@ const DownloadButton = (props) => {
                 style={{ textDecoration: 'none', display: 'inline-block' }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <SnowTextButton title={props.title} onPress={() => { }} />
+                <SnowTextButton focusKey={props.focusKey} title={title} onPress={() => { }} />
             </a>
         );
     }
 
-    return <SnowTextButton title={props.title} onPress={onPress} />;
+    return <SnowTextButton focusKey={props.focusKey} title={title} onPress={onPress} />;
 };
 
 export default DownloadButton;
