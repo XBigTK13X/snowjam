@@ -1,10 +1,11 @@
+import React from 'react'
 import { View } from 'react-native'
 import Snow from 'expo-snowui'
 import { AppContextProvider, config, useAppContext } from 'snowjam'
 import { routes } from './routes'
 import { pages } from './pages'
 
-const appStyle = {
+let appStyle = {
     color: {
         background: 'black',
         text: 'rgb(235, 235, 235)',
@@ -21,9 +22,57 @@ const appStyle = {
     }
 }
 
+appStyle.component = {
+    textButton: {
+        wrapper: {
+            height: 80
+        }
+    }
+}
+
+function NavControls(props) {
+    const { currentRoute, navPush } = Snow.useSnowContext()
+    const seriesId = currentRoute?.routeParams?.seriesId
+    const gameId = currentRoute?.routeParams?.gameId
+
+    console.log({
+        currentRoute
+    })
+    if (currentRoute.routePath === routes.landing || currentRoute.routePath === routes.search) {
+        return props.children
+    }
+    let homeButton = <Snow.TextButton title="Home" onPress={navPush(routes.landing, true)} />
+    let seriesButton = null
+    if (seriesId) {
+        seriesButton = <Snow.TextButton title="Series" onPress={navPush(routes.gameList, { seriesId }, true)} />
+    }
+    let gameButton = null
+    if (gameId) {
+        gameButton = <Snow.TextButton title="Game" onPress={navPush(routes.songList, { seriesId, gameId }, true)} />
+    }
+    return (
+        <View style={{ flexDirection: 'row', flex: 1 }}>
+            <View style={{ width: '20%' }}>
+                {homeButton}
+                {seriesButton}
+                {gameButton}
+
+            </View>
+            <Snow.Break vertical />
+            <View style={{ width: '80%' }}>
+                {props.children}
+            </View>
+        </View>
+    )
+}
+
 function PageWrapper(props) {
     const { CurrentPage } = Snow.useSnowContext()
-    return <CurrentPage />
+    return (
+        <NavControls>
+            <CurrentPage />
+        </NavControls>
+    )
 }
 
 export default function PageLoader() {

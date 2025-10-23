@@ -1,21 +1,6 @@
 import axios from 'axios'
 import util from './util'
 
-const JOB_PROPERTIES = [
-    ['targetKind', 'target_kind'],
-    ['targetId', 'target_id'],
-    ['targetDirectory', 'target_directory'],
-    ['metadataId', 'metadata_id'],
-    ['metadataSource', 'metadata_source'],
-    ['seasonOrder', 'season_order'],
-    ['episodeOrder', 'episode_order'],
-    ['updateMetadata', 'update_metadata'],
-    ['updateImages', 'update_images'],
-    ['updateVideos', 'update_videos'],
-    ['skipExisting', 'skip_existing'],
-    ['extractOnly', 'extract_only'],
-]
-
 export class ApiClient {
     constructor(details) {
         this.webApiUrl = details.webApiUrl

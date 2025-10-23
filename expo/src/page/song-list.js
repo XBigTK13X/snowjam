@@ -24,10 +24,9 @@ export default function SongListPage() {
 
     return (
         <>
-            <C.SnowHeader center>{series}</C.SnowHeader>
-            <C.SnowHeader center>{game}</C.SnowHeader>
-            <C.SnowGrid itemsPerRow={4} items={songList} renderItem={(item) => {
-                return <C.SnowTextButton title={item.name} onPress={navPush(routes.songDetails, { seriesId, gameId, songId: item.id }, true)} />
+            <C.SnowGrid itemsPerRow={4} itemsPerPage={20} items={songList} renderItem={(item) => {
+                return <C.SnowTextButton
+                    title={item.name} onPress={navPush(routes.songDetails, { seriesId, gameId, songId: item.id }, true)} />
             }} />
         </>
     )

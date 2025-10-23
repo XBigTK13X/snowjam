@@ -23,7 +23,7 @@
     ],
     "splash": {
       "image": "./assets/icon/splash.png",
-      "backgroundColor": "#ff9a3f"
+      "backgroundColor": "#DB2C2C"
     },
     "icon": "./assets/icon/appicon.png",
     "name": "snowjam",

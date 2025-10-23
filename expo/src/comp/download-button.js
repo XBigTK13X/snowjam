@@ -1,33 +1,55 @@
-import React, { useMemo } from 'react';
-import { Platform, Alert } from 'react-native';
-import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
-import * as SecureStore from 'expo-secure-store';
+import React from 'react';
+import { Platform, Alert, PermissionsAndroid } from 'react-native';
+import RNBlobUtil from 'react-native-blob-util';
 import { SnowTextButton } from 'expo-snowui';
 
-const ANDROID_FOLDER_KEY = 'user_download_folder_uri';
+const PUBLIC_DIR = '/storage/emulated/0/Download/snowjam';
 
-async function getOrPickAndroidDirectory() {
-    const cached = await SecureStore.getItemAsync(ANDROID_FOLDER_KEY);
-    if (cached) return cached;
-
-    const perms = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
-    if (!perms.granted) throw new Error('Permission denied to access external storage.');
-
-    await SecureStore.setItemAsync(ANDROID_FOLDER_KEY, perms.directoryUri);
-    return perms.directoryUri;
+async function ensureStoragePermission() {
+    const perms = [
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+    ];
+    for (const p of perms) {
+        const granted = await PermissionsAndroid.request(p);
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            throw new Error('Permission denied for external storage.');
+        }
+    }
 }
 
-const DownloadButton = (props) => {expo
-    if (Platform.OS === 'web') {
-        const href = useMemo(() => {
-            const sep = props.fileUrl.includes('?') ? '&' : '?';
-            return `${props.fileUrl}${sep}_=${Date.now()}`;
-        }, [props.fileUrl]);
+const DownloadButton = (props) => {
+    const onPress = async () => {
+        try {
+            await ensureStoragePermission();
 
+            const subDir = props.subDir ? `/${props.subDir}` : '';
+            const targetPath = `${PUBLIC_DIR}${subDir}/${props.fileName}`;
+            console.log('[DownloadButton] Downloading to:', targetPath);
+
+            const res = await RNBlobUtil.config({
+                addAndroidDownloads: {
+                    useDownloadManager: true,
+                    notification: true,
+                    path: targetPath,
+                    mime: 'application/pdf', // adjust if needed
+                    title: props.fileName,
+                    description: 'snowjam download',
+                },
+            }).fetch('GET', props.fileUrl);
+
+            console.log('[DownloadButton] ✅ Download complete:', res.path());
+            Alert.alert('Success', `File saved to:\n${targetPath}`);
+        } catch (err) {
+            console.error('[DownloadButton] ❌ Error:', err);
+            Alert.alert('Error', err.message);
+        }
+    };
+
+    if (Platform.OS === 'web') {
         return (
             <a
-                href={href}
+                href={props.fileUrl}
                 download={props.fileName}
                 style={{ textDecoration: 'none', display: 'inline-block' }}
                 onClick={(e) => e.stopPropagation()}
@@ -36,66 +58,6 @@ const DownloadButton = (props) => {expo
             </a>
         );
     }
-
-    const onPress = async () => {
-        try {
-            const { status } = await MediaLibrary.requestPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert('Permission denied', 'Cannot save file without permission.');
-                return;
-            }
-
-            const baseCache = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
-            if (!baseCache) throw new Error('No writable cache directory found.');
-
-            const tempPath = `${baseCache}${Date.now()}-${props.fileName}`;
-            console.log('[DownloadButton] Downloading to cache:', tempPath);
-
-            const { uri } = await FileSystem.downloadAsync(props.fileUrl, tempPath);
-            console.log('[DownloadButton] Download complete:', uri);
-
-            if (Platform.OS === 'android') {
-                const baseDirUri = await getOrPickAndroidDirectory();
-                console.log('[DownloadButton] Base directory URI:', baseDirUri);
-
-                let targetDirUri = baseDirUri;
-                if (props.subDir) {
-                    try {
-                        targetDirUri = await FileSystem.StorageAccessFramework.makeDirectoryAsync(
-                            baseDirUri,
-                            props.subDir,
-                            { intermediates: true }
-                        );
-                    } catch (err) {
-                        console.warn('[DownloadButton] Subdir may already exist:', err.message);
-                    }
-                }
-
-                const content = await FileSystem.readAsStringAsync(uri, {
-                    encoding: FileSystem.EncodingType.Base64,
-                });
-
-                const destUri = await FileSystem.StorageAccessFramework.createFileAsync(
-                    targetDirUri,
-                    props.fileName,
-                    'application/octet-stream'
-                );
-
-                await FileSystem.writeAsStringAsync(destUri, content, {
-                    encoding: FileSystem.EncodingType.Base64,
-                });
-
-                Alert.alert('Success', `File saved to:\n${destUri}`);
-                console.log('[DownloadButton] ✅ Saved to:', destUri);
-            } else {
-                await MediaLibrary.saveToLibraryAsync(uri);
-                Alert.alert('Success', 'File saved to your Files or Photos app.');
-            }
-        } catch (err) {
-            console.error('[DownloadButton] ❌ Error:', err);
-            Alert.alert('Error', err.message);
-        }
-    };
 
     return <SnowTextButton title={props.title} onPress={onPress} />;
 };

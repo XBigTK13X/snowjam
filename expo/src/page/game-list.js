@@ -22,9 +22,9 @@ export default function GameListPage() {
 
     return (
         <>
-            <C.SnowHeader center>{series}</C.SnowHeader>
-            <C.SnowGrid itemsPerRow={4} items={gameList} renderItem={(item) => {
-                return <C.SnowTextButton title={item.name} onPress={navPush(routes.songList, { seriesId, gameId: item.id }, true)} />
+            <C.SnowGrid itemsPerRow={4} itemsPerPage={20} items={gameList} renderItem={(item) => {
+                return <C.SnowTextButton
+                    title={item.name} onPress={navPush(routes.songList, { seriesId, gameId: item.id }, true)} />
             }} />
         </>
     )
