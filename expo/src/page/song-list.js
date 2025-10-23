@@ -20,7 +20,7 @@ export default function SongListPage() {
 
     return (
         <>
-            <C.SnowGrid focusKey="song-grid" itemsPerRow={4} itemsPerPage={20} items={songList} renderItem={(item) => {
+            <C.SnowGrid focusKey="song-grid" itemsPerRow={2} itemsPerPage={10} items={songList} renderItem={(item) => {
                 return <C.SnowTextButton
                     title={item.name} onPress={navPush(routes.songDetails, {
                         seriesId,

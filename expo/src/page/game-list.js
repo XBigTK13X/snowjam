@@ -20,7 +20,7 @@ export default function GameListPage() {
 
     return (
         <>
-            <C.SnowGrid focusKey="game-grid" itemsPerRow={4} itemsPerPage={20} items={gameList} renderItem={(item) => {
+            <C.SnowGrid focusKey="game-grid" itemsPerRow={2} itemsPerPage={10} items={gameList} renderItem={(item) => {
                 return <C.SnowTextButton
                     title={item.name} onPress={navPush(routes.songList, {
                         seriesId,

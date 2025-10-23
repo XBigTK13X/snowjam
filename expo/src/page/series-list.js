@@ -17,7 +17,7 @@ export default function SeriesListPage() {
     }
 
     return (
-        <C.SnowGrid focusKey="series-grid" itemsPerRow={4} items={seriesList} renderItem={(item) => {
+        <C.SnowGrid focusKey="series-grid" itemsPerRow={2} items={seriesList} renderItem={(item) => {
             return <C.SnowTextButton title={item.name} onPress={navPush(routes.gameList, {
                 seriesId: item.id,
                 seriesName: item.name
