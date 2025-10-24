@@ -13,6 +13,20 @@ export default function LandingPage() {
         }
     }
 
+
+
+    C.React.useEffect(() => {
+        const params = {
+            seriesId: 'b18aa59f95cd93d059b8e797bc52fc61',
+            seriesName: 'Animal Crossing',
+            gameId: 'b18aa59f95cd93d059b8e797bc52fc61',
+            gameName: 'Animal Crossing',
+            songId: '1eba7893aebe14a7963a110ba2ef4374',
+            songName: '1 00 P.M.'
+        }
+        navPush(routes.songDetails, params)
+    }, [])
+
     return (
         <C.View>
             <C.SnowGrid itemsPerRow={2}>
